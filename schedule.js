@@ -1,10 +1,3 @@
-// // Import FaunaDB client
-// const faunadb = require('faunadb');
-// const q = faunadb.query;
-
-// // Initialize FaunaDB client
-// const client = new faunadb.Client({ secret: 'YOUR_FAUNADB_SECRET' });
-
 // Ensure the FaunaDB library is available
 const q = window.faunadb.query;
 
@@ -104,13 +97,26 @@ const updateMeal = async () => {
     document.getElementById(`dinner-${date}`).textContent = dinner;
 
     try {
+        const existingMeal = await client.query(
+            q.Get(q.Match(q.Index('meal_by_date'), date))
+        );
+
         await client.query(
-            q.Create(q.Collection('MealSchedule'), {
-                data: { date, breakfast, lunch, snack, dinner }
+            q.Update(existingMeal.ref, {
+                data: { breakfast, lunch, snack, dinner }
             })
         );
     } catch (error) {
-        console.error('Error updating meal:', error);
+        // If meal doesn't exist, create a new one
+        if (error.name === 'NotFound') {
+            await client.query(
+                q.Create(q.Collection('MealSchedule'), {
+                    data: { date, breakfast, lunch, snack, dinner }
+                })
+            );
+        } else {
+            console.error('Error updating meal:', error);
+        }
     }
 
     // Clear the form fields
