@@ -64,12 +64,15 @@ const generateMealTable = () => {
 // Function to fetch meals from FaunaDB
 const fetchMeals = async () => {
     try {
+        console.log('Fetching meals...');
         const response = await client.query(
             q.Map(
                 q.Paginate(q.Match(q.Index('meal_by_date'))),
                 q.Lambda('X', q.Get(q.Var('X')))
             )
         );
+
+        console.log('Meals fetched:', response);
 
         response.data.forEach(doc => {
             const { date, breakfast, lunch, snack, dinner } = doc.data;
@@ -97,10 +100,12 @@ const updateMeal = async () => {
     document.getElementById(`dinner-${date}`).textContent = dinner;
 
     try {
-        // Check if the meal for the given date already exists
+        console.log('Checking for existing meal...');
         const existingMeal = await client.query(
             q.Get(q.Match(q.Index('meal_by_date'), date))
         );
+
+        console.log('Existing meal found:', existingMeal);
 
         // Update the existing meal
         await client.query(
@@ -108,14 +113,19 @@ const updateMeal = async () => {
                 data: { breakfast, lunch, snack, dinner }
             })
         );
+
+        console.log('Meal updated:', { date, breakfast, lunch, snack, dinner });
     } catch (error) {
         if (error.name === 'NotFound') {
+            console.log('No existing meal found, creating new meal...');
             // If the meal doesn't exist, create a new one
             await client.query(
                 q.Create(q.Collection('plans'), {
                     data: { date, breakfast, lunch, snack, dinner }
                 })
             );
+
+            console.log('Meal created:', { date, breakfast, lunch, snack, dinner });
         } else {
             console.error('Error updating meal:', error);
         }
