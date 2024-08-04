@@ -1,8 +1,10 @@
+import { FAUNADB_SECRET } from './config.js';
+
 // Ensure the FaunaDB library is available
 const q = window.faunadb.query;
 
-// Initialize FaunaDB client
-const client = new window.faunadb.Client({ secret: 'YOUR_FAUNADB_SECRET' });
+// Initialize FaunaDB client with the environment variable
+const client = new window.faunadb.Client({ secret: FAUNADB_SECRET });
 console.log('FaunaDB client initialized:', client);
 
 // Function to get the number of days in the current month
