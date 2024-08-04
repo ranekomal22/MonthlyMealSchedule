@@ -66,8 +66,8 @@ const fetchMeals = async () => {
     try {
         const response = await client.query(
             q.Map(
-                q.Paginate(q.Documents(q.Collection('MealSchedule'))),
-                q.Lambda('ref', q.Get(q.Var('ref')))
+                q.Paginate(q.Match(q.Index('meal_by_date'))),
+                q.Lambda('X', q.Get(q.Var('X')))
             )
         );
 
@@ -97,20 +97,22 @@ const updateMeal = async () => {
     document.getElementById(`dinner-${date}`).textContent = dinner;
 
     try {
+        // Check if the meal for the given date already exists
         const existingMeal = await client.query(
             q.Get(q.Match(q.Index('meal_by_date'), date))
         );
 
+        // Update the existing meal
         await client.query(
             q.Update(existingMeal.ref, {
                 data: { breakfast, lunch, snack, dinner }
             })
         );
     } catch (error) {
-        // If meal doesn't exist, create a new one
         if (error.name === 'NotFound') {
+            // If the meal doesn't exist, create a new one
             await client.query(
-                q.Create(q.Collection('MealSchedule'), {
+                q.Create(q.Collection('plans'), {
                     data: { date, breakfast, lunch, snack, dinner }
                 })
             );
