@@ -3,6 +3,7 @@ const q = window.faunadb.query;
 
 // Initialize FaunaDB client
 const client = new window.faunadb.Client({ secret: 'YOUR_FAUNADB_SECRET' });
+console.log('FaunaDB client initialized:', client);
 
 // Function to get the number of days in the current month
 const getDaysInCurrentMonth = () => {
@@ -93,6 +94,9 @@ const updateMeal = async () => {
     const lunch = document.getElementById('lunch').value;
     const snack = document.getElementById('snack').value;
     const dinner = document.getElementById('dinner').value;
+
+    console.log('Updating meal for date:', date);
+    console.log('Meal details:', { breakfast, lunch, snack, dinner });
 
     document.getElementById(`breakfast-${date}`).textContent = breakfast;
     document.getElementById(`lunch-${date}`).textContent = lunch;
