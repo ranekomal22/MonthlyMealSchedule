@@ -7,12 +7,9 @@ node_modules/
 # Ignore build output
 dist/
 
-# Ignore Mac system files
-.DS_Store
-
 # Ignore log files
 logs
 *.log
 
 # Ignore Netlify functions cache
-.netlify/functions/
+.netlify

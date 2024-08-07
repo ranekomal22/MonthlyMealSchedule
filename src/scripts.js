@@ -1,6 +1,7 @@
 async function getFaunaSecret() {
     const response = await fetch('/.netlify/functions/getFaunaSecret');
     const data = await response.json();
+    console.log("FaunaDB Secret from client:", data.secret); // Log the secret for debugging
     return data.secret;
 }
 
