@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Meal Planner</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Daily Meal Planner</h1>
+        <form id="meal-form">
+            <label for="date">Date:</label>
+            <input type="date" id="date" required>
+            <label for="breakfast">Breakfast:</label>
+            <input type="text" id="breakfast">
+            <label for="lunch">Lunch:</label>
+            <input type="text" id="lunch">
+            <label for="snacks">Snacks:</label>
+            <input type="text" id="snacks">
+            <label for="dinner">Dinner:</label>
+            <input type="text" id="dinner">
+            <button type="submit">Save Meal Plan</button>
+        </form>
+        <h2>Meal Plans</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Breakfast</th>
+                    <th>Lunch</th>
+                    <th>Snacks</th>
+                    <th>Dinner</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="meal-plans">
+                <!-- Meal plans will be displayed here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/faunadb@4.5.1/dist/faunadb-min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>
