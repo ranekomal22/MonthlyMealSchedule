@@ -1,8 +1,9 @@
 const faunadb = require('faunadb');
+require('dotenv').config();
 
 exports.handler = async function(event, context) {
   try {
-    const secret = fnAFn9Q312AAQe6iF1H2fph6rOVumGbMkOIxsWAY;
+    const secret = process.env.FAUNADB_SECRET;
     console.log("FAUNADB_SECRET from function:", secret); // Log the secret for debugging
     if (!secret) {
       throw new Error("FAUNADB_SECRET is not defined");
