@@ -40,30 +40,8 @@ getFaunaSecret().then(secret => {
         });
     }
 
-    document.getElementById('meal-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const date = document.getElementById('date').value;
-        const breakfast = document.getElementById('breakfast').value;
-        const lunch = document.getElementById('lunch').value;
-        const snacks = document.getElementById('snacks').value;
-        const dinner = document.getElementById('dinner').value;
-
-        const mealPlan = { date, breakfast, lunch, snacks, dinner };
-
-        client.query(
-            q.Create(
-                q.Collection('plans2'),
-                { data: mealPlan }
-            )
-        ).then(() => {
-            console.log('Meal plan saved:', mealPlan);
-            displayMealPlans();
-            document.getElementById('meal-form').reset();
-        }).catch(err => console.error('Error: ', err));
-    });
-
-    function deleteMealPlan(ref) {
+    // Function to delete a meal plan
+    window.deleteMealPlan = function(ref) {  // Make sure deleteMealPlan is globally accessible
         client.query(
             q.Delete(q.Ref(q.Collection('plans2'), ref))
         ).then(() => {
@@ -72,6 +50,7 @@ getFaunaSecret().then(secret => {
         }).catch(err => console.error('Error: ', err));
     }
 
+    // Function to display meal plans
     function displayMealPlans() {
         client.query(
             q.Paginate(
@@ -109,6 +88,29 @@ getFaunaSecret().then(secret => {
             });
         }).catch(err => console.error('Error: ', err));
     }
+
+    document.getElementById('meal-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const date = document.getElementById('date').value;
+        const breakfast = document.getElementById('breakfast').value;
+        const lunch = document.getElementById('lunch').value;
+        const snacks = document.getElementById('snacks').value;
+        const dinner = document.getElementById('dinner').value;
+
+        const mealPlan = { date, breakfast, lunch, snacks, dinner };
+
+        client.query(
+            q.Create(
+                q.Collection('plans2'),
+                { data: mealPlan }
+            )
+        ).then(() => {
+            console.log('Meal plan saved:', mealPlan);
+            displayMealPlans();
+            document.getElementById('meal-form').reset();
+        }).catch(err => console.error('Error: ', err));
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
         testFaunaConnection();
